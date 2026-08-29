@@ -1,0 +1,15 @@
+{
+  "name": "ns-corporation",
+  "version": "2.0.0",
+  "private": true,
+  "description": "N.S. Corporation website + vehicle stock API and admin panel",
+  "main": "server/server.js",
+  "scripts": {
+    "start": "node server/server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "express-session": "^1.18.0",
+    "multer": "^2.0.1"
+  }
+}

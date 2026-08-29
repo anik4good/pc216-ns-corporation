@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Vehicle Manager — N.S. Corporation</title>
+  <link rel="icon" href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" fill="%23070707"/><text x="32" y="45" font-family="Georgia" font-size="28" fill="%23d4af37" text-anchor="middle">NS</text></svg>'>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+
+  <!-- SIGN IN -->
+  <div class="login-wrap" id="loginView">
+    <form class="login-card" id="loginForm">
+      <div class="login-brand">NS</div>
+      <h1>N.S. Corporation</h1>
+      <p class="login-sub">Vehicle Manager — sign in to continue</p>
+      <label for="lg-user">Username</label>
+      <input id="lg-user" type="text" autocomplete="username" required>
+      <label for="lg-pass">Password</label>
+      <input id="lg-pass" type="password" autocomplete="current-password" required>
+      <p class="login-error" id="loginError"></p>
+      <button type="submit" class="btn-gold">Sign In</button>
+    </form>
+  </div>
+
+  <!-- MANAGER -->
+  <div class="app" id="appView" hidden>
+    <header class="bar">
+      <div class="bar-inner">
+        <span class="bar-brand">NS <em>Vehicle Manager</em></span>
+        <span class="bar-actions">
+          <a href="/" target="_blank" rel="noopener">View Site</a>
+          <button id="logoutBtn" class="btn-line" type="button">Sign Out</button>
+        </span>
+      </div>
+    </header>
+
+    <main class="main">
+      <div class="stats" id="stats"></div>
+      <div class="toolbar">
+        <button id="addBtn" class="btn-gold" type="button">+ Add Vehicle</button>
+      </div>
+      <div id="list" class="list"></div>
+    </main>
+  </div>
+
+  <!-- ADD / EDIT MODAL -->
+  <div class="modal" id="modal" hidden>
+    <div class="modal-card">
+      <div class="modal-head">
+        <h2 id="modalTitle">Add Vehicle</h2>
+        <button class="btn-line" id="closeModal" type="button">&times; Close</button>
+      </div>
+
+      <form id="vehForm">
+        <div class="grid2">
+          <div class="fld"><label for="f-make">Make *</label><input id="f-make" type="text" placeholder="Toyota" required></div>
+          <div class="fld"><label for="f-model">Model *</label><input id="f-model" type="text" placeholder="Harrier Hybrid" required></div>
+          <div class="fld"><label for="f-year">Year</label><input id="f-year" type="number" min="1950" max="2100" placeholder="2021"></div>
+          <div class="fld"><label for="f-mileage">Mileage (km)</label><input id="f-mileage" type="number" min="0" placeholder="45000"></div>
+          <div class="fld"><label for="f-engine">Engine Size</label><input id="f-engine" type="text" placeholder="2490 cc"></div>
+          <div class="fld"><label for="f-fuel">Fuel Type</label>
+            <select id="f-fuel"><option value=""></option><option>Petrol</option><option>Diesel</option><option>Hybrid</option><option>Electric</option></select></div>
+          <div class="fld"><label for="f-transmission">Transmission</label>
+            <select id="f-transmission"><option value=""></option><option>Automatic</option><option>Manual</option></select></div>
+          <div class="fld"><label for="f-color">Color</label><input id="f-color" type="text" placeholder="Pearl White"></div>
+          <div class="fld"><label for="f-chassis">Chassis / Model Code</label><input id="f-chassis" type="text" placeholder="ZSU80W"></div>
+          <div class="fld"><label for="f-grade">Auction Grade</label><input id="f-grade" type="text" placeholder="4.5"></div>
+          <div class="fld"><label for="f-stock">Stock Number</label><input id="f-stock" type="text" placeholder="NS-1001"></div>
+          <div class="fld"><label for="f-dest">Destination Country (for sold/exported)</label><input id="f-dest" type="text" placeholder="New Zealand"></div>
+          <div class="fld"><label for="f-price">FOB Price</label><input id="f-price" type="number" min="0" placeholder="2450000"></div>
+          <div class="fld"><label for="f-currency">Currency</label>
+            <select id="f-currency"><option>JPY</option><option>USD</option></select></div>
+          <div class="fld"><label for="f-status">Status *</label>
+            <select id="f-status"><option>AVAILABLE</option><option>RESERVED</option><option>SOLD</option></select></div>
+          <div class="fld fld-check">
+            <input id="f-hidePrice" type="checkbox">
+            <label for="f-hidePrice">Hide price <small>(recommended for sold vehicles)</small></label>
+          </div>
+        </div>
+
+        <div class="fld">
+          <label for="f-desc">Description / Remarks</label>
+          <textarea id="f-desc" rows="4" placeholder="Condition notes, features, history..."></textarea>
+        </div>
+
+        <div class="fld">
+          <label for="f-photos">Photos</label>
+          <input id="f-photos" type="file" accept="image/*" multiple>
+          <p class="hint">You can select several photos at once. They upload immediately — a stable internet connection is recommended on mobile.</p>
+          <div class="thumbs" id="photoThumbs"></div>
+        </div>
+
+        <p class="form-error" id="formError"></p>
+        <div class="modal-actions">
+          <button type="button" class="btn-line" id="cancelModal">Cancel</button>
+          <button type="submit" class="btn-gold" id="saveBtn">Save Vehicle</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" hidden></div>
+
+  <script src="admin.js"></script>
+</body>
+</html>

@@ -1,13 +1,23 @@
-# N.S. Corporation — static site serve via Nginx
-FROM nginx:1.27-alpine
+# N.S. Corporation — Node app (website + vehicle API + admin panel)
+FROM node:20-alpine
 
-# Custom nginx config listening on port 8084
-COPY docker/nginx.conf /etc/nginx/conf.d/default.conf
+WORKDIR /app
 
-# Ship the built site to the web root
-COPY index.html /usr/share/nginx/html/
-COPY assets /usr/share/nginx/html/assets
+# Install dependencies first (better layer caching)
+COPY package*.json ./
+RUN npm ci --omit=dev
+
+# App files
+COPY index.html vehicle.html ./
+COPY assets ./assets
+COPY admin ./admin
+COPY server ./server
+
+ENV PORT=8084 \
+    NODE_ENV=production
+
+# Vehicle database + uploaded photos live here (mount a volume!)
+VOLUME ["/app/data"]
 
 EXPOSE 8084
-
-CMD ["nginx", "-g", "daemon off;"]
+CMD ["node", "server/server.js"]

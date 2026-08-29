@@ -4,4 +4,11 @@ services:
     container_name: ns-corporation
     ports:
       - "8084:8084"
+    volumes:
+      - ./data:/app/data
+    environment:
+      # CHANGE THESE BEFORE GOING LIVE
+      - ADMIN_USER=admin
+      - ADMIN_PASSWORD=change-this-password
+      - SESSION_SECRET=change-this-long-random-string
     restart: unless-stopped
