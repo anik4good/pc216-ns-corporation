@@ -1,0 +1,6 @@
+node_modules
+.git
+design_idea
+preview.png
+Dockerfile
+.dockerignore
