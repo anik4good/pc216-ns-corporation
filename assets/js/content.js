@@ -61,6 +61,11 @@ const SITE = {
     sub: "Quality Japanese vehicles sourced directly from Japan for customers around the world. From vehicle selection to international shipping, N.S. CORPORATION handles the process from purchase to delivery.",
     primaryCta: { label: "Contact Us", href: "#contact" },
     secondaryCta: { label: "WhatsApp Us", href: "https://wa.me/819084105655", whatsapp: true },
+    slides: [
+      { src: "assets/img/hero-1.jpg", alt: "Premium black coupe" },
+      { src: "assets/img/hero-2.jpg", alt: "Black sports car in the dark" },
+      { src: "assets/img/hero-3.jpg", alt: "Supercar front in low light" }
+    ],
     stats: [
       { num: 19, suffix: "+", label: "Years of Experience" },
       { num: 25, suffix: "+", label: "Countries Served" },

@@ -65,3 +65,7 @@ data/                 created at runtime: db.json + uploads/ (backup this)
 - Bank details (Bank name, branch, account no., SWIFT…) — in `assets/js/content.js` under `bank.fields`
 - Facebook / Instagram links — `contactInfo.socials` in the same file
 - Full company address & business hours — `contactInfo` in the same file
+
+## Image credits
+
+Hero slideshow photos are free stock images from [Pixabay](https://pixabay.com/) under the Pixabay Content License (free for commercial use, no attribution required). To swap them, replace assets/img/hero-1.jpg … hero-3.jpg (or edit hero.slides in assets/js/content.js).

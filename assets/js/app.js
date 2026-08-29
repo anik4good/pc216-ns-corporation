@@ -113,9 +113,15 @@
     const stats = h.stats.map((s) =>
       `<div class="stat"><strong data-count="${s.num}">0</strong><sup>${esc(s.suffix)}</sup><span>${esc(s.label)}</span></div>`).join("");
     const sec = h.secondaryCta;
+    const slides = (h.slides || []).map((s, i) =>
+      `<div class="hero-slide${i === 0 ? " active" : ""}" style="background-image:url('${esc(s.src)}')" role="img" aria-label="${esc(s.alt || "")}"></div>`).join("");
+    const dots = (h.slides || []).map((s, i) =>
+      `<button class="hero-dot${i === 0 ? " active" : ""}" data-i="${i}" type="button" aria-label="Show slide ${i + 1}"></button>`).join("");
     $("#home").innerHTML = `
-      <div class="hero-bg"></div>
-      <div class="hero-watermark">NS</div>
+      <div class="hero-bg">
+        <div class="hero-slides">${slides}</div>
+        <div class="hero-shade"></div>
+      </div>
       <div class="container hero-inner">
         <p class="eyebrow reveal"><span class="line"></span>${esc(h.overline)}<span class="line"></span></p>
         <h1 class="reveal">${esc(h.title)}<br><span class="gold-text">${esc(h.titleGold)}</span></h1>
@@ -126,7 +132,24 @@
         </div>
         <div class="stats reveal">${stats}</div>
       </div>
+      ${h.slides && h.slides.length > 1 ? `<div class="hero-dots">${dots}</div>` : ""}
       <div class="scroll-hint"></div>`;
+    initHeroSlider();
+  }
+
+  function initHeroSlider() {
+    const slides = document.querySelectorAll(".hero-slide");
+    if (slides.length < 2) return;
+    let idx = 0, timer = null;
+    const dots = document.querySelectorAll(".hero-dot");
+    const show = (n) => {
+      idx = (n + slides.length) % slides.length;
+      slides.forEach((el, i) => el.classList.toggle("active", i === idx));
+      dots.forEach((d, i) => d.classList.toggle("active", i === idx));
+    };
+    const play = () => { clearInterval(timer); timer = setInterval(() => show(idx + 1), 6000); };
+    dots.forEach((d) => d.addEventListener("click", () => { show(+d.dataset.i); play(); }));
+    play();
   }
 
   /* ---------- About ---------- */
