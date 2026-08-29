@@ -427,6 +427,7 @@ form::before { content: ""; position: absolute; top: 0; left: 0; right: 0; heigh
   color: var(--ivory); font-family: var(--sans); font-size: .95rem; letter-spacing: .03em; transition: .3s; border-radius: 0;
 }
 .field select option { background: #212121; }
+.field input::placeholder, .field textarea::placeholder { color: #ffffff; opacity: 1; }
 .field input:focus, .field select:focus, .field textarea:focus { outline: none; border-color: var(--gold); box-shadow: 0 0 0 3px rgba(224, 169, 56, .12); }
 .field textarea { resize: vertical; min-height: 120px; }
 .wa-note { display: flex; align-items: center; flex-wrap: wrap; gap: .6rem; color: var(--muted); font-size: .88rem; margin-top: 1.5rem; }
