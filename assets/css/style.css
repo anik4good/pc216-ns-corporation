@@ -172,6 +172,7 @@ section { padding: 6.5rem 0; position: relative; }
 @keyframes scrollLine { to { top: 110%; } }
 
 /* ---------- who we are / about ---------- */
+#about { background: radial-gradient(700px 400px at 100% 8%, rgba(212, 175, 55, .06), transparent 60%); }
 .who-grid { display: grid; grid-template-columns: 1.15fr .85fr; gap: 4.5rem; align-items: center; }
 .who-copy .eyebrow { margin-bottom: 1.4rem; }
 .who-copy h2 { font-size: clamp(1.9rem, 3.4vw, 2.7rem); letter-spacing: .05em; margin-bottom: 1.6rem; }
@@ -192,8 +193,8 @@ section { padding: 6.5rem 0; position: relative; }
 .values strong { display: block; font-weight: 500; letter-spacing: .12em; color: var(--gold-light); text-transform: uppercase; font-size: .82rem; }
 .values span { font-size: .9rem; color: var(--muted); }
 
-/* ---------- what we do ---------- */
-.what { background: var(--bg2); border-top: 1px solid var(--line-soft); border-bottom: 1px solid var(--line-soft); }
+/* ---------- what we do / services ---------- */
+.what { background: #0b0b0b; border-top: 1px solid var(--line-soft); border-bottom: 1px solid var(--line-soft); }
 .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.6rem; }
 .service { background: linear-gradient(180deg, #101010, #0a0a0a); border: 1px solid var(--line-soft); padding: 2.4rem 2rem; position: relative; transition: .35s; }
 .service::after { content: ""; position: absolute; top: -1px; left: 0; height: 2px; width: 0; background: var(--grad-gold); transition: width .45s; }
@@ -222,8 +223,34 @@ section { padding: 6.5rem 0; position: relative; }
 .flow-arrow { position: absolute; top: 50%; right: -1.7rem; transform: translateY(-50%) rotate(-45deg); width: 22px; height: 22px; color: var(--gold); opacity: .65; z-index: 2; }
 .flow-arrow svg { width: 100%; height: 100%; }
 
+/* process — light ivory band (contrast break) */
+#process {
+  background:
+    radial-gradient(820px 420px at 50% -12%, rgba(212, 175, 55, .22), transparent 62%),
+    linear-gradient(180deg, #f3eedf, #e9e2cd);
+  color: #17130a;
+}
+#process .eyebrow { color: #8f6b1f; }
+#process .eyebrow .line { background: linear-gradient(90deg, transparent, #b98f2a); }
+#process .eyebrow .line:last-child { background: linear-gradient(90deg, #b98f2a, transparent); }
+#process .sec-head .sub { color: #655c48; }
+#process .gold-text { background: linear-gradient(100deg, #8f6b1f 0%, #c49a2c 45%, #8f6b1f 100%); -webkit-background-clip: text; background-clip: text; }
+#process .flow-step { background: #fffdf6; border-color: rgba(143, 107, 31, .22); box-shadow: 0 14px 34px rgba(23, 19, 10, .10); }
+#process .flow-step:hover { transform: translateY(-6px); border-color: rgba(143, 107, 31, .45); box-shadow: 0 24px 48px rgba(23, 19, 10, .16); }
+#process .flow-step h3 { color: #17130a; }
+#process .flow-step p { color: #655c48; }
+#process .flow-icon { border-color: rgba(143, 107, 31, .4); color: #8f6b1f; }
+#process .flow-icon .num { background: #fffdf6; border-color: #b98f2a; color: #8f6b1f; }
+#process .flow-arrow { color: #8f6b1f; }
+
 /* ---------- global reach ---------- */
-.global { background: var(--bg2); border-top: 1px solid var(--line-soft); border-bottom: 1px solid var(--line-soft); }
+.global {
+  background:
+    radial-gradient(1100px 620px at 78% 42%, rgba(212, 175, 55, .10), transparent 62%),
+    #0a0a0a;
+  border-top: 1px solid var(--line-soft);
+  border-bottom: 1px solid var(--line-soft);
+}
 .global-grid { display: grid; grid-template-columns: .9fr 1.1fr; gap: 4rem; align-items: center; }
 .global-copy .eyebrow { margin-bottom: 1.4rem; }
 .global-copy h2 { font-size: clamp(1.9rem, 3.2vw, 2.6rem); margin-bottom: 1.4rem; letter-spacing: .05em; }
@@ -242,7 +269,13 @@ section { padding: 6.5rem 0; position: relative; }
 @keyframes dash { to { stroke-dashoffset: 0; } }
 
 /* ---------- vehicle stock ---------- */
-.vehicles { background: var(--bg2); border-top: 1px solid var(--line-soft); border-bottom: 1px solid var(--line-soft); }
+.vehicles {
+  background:
+    radial-gradient(900px 420px at 50% 0%, rgba(212, 175, 55, .09), transparent 65%),
+    linear-gradient(180deg, #151109, #0c0a06);
+  border-top: 1px solid var(--line-soft);
+  border-bottom: 1px solid var(--line-soft);
+}
 .v-filters { display: flex; justify-content: center; gap: .8rem; flex-wrap: wrap; margin-bottom: 3rem; }
 .v-filter {
   background: transparent; border: 1px solid var(--line); color: var(--ivory);
@@ -305,8 +338,12 @@ section { padding: 6.5rem 0; position: relative; }
 .vd-desc p { color: var(--muted); white-space: pre-line; }
 
 /* ---------- bank / payment information ---------- */
-.bank { background: var(--bg); }
-.bank-panel { max-width: 880px; margin: 0 auto; background: linear-gradient(180deg, #101010, #0a0a0a); border: 1px solid var(--line-soft); padding: 3rem; position: relative; }
+.bank {
+  background:
+    radial-gradient(1000px 520px at 50% 115%, rgba(212, 175, 55, .12), transparent 62%),
+    linear-gradient(180deg, #070707, #131007 55%, #070707);
+}
+.bank-panel { max-width: 880px; margin: 0 auto; background: linear-gradient(180deg, #111008, #0b0a05); border: 1px solid rgba(212, 175, 55, .38); box-shadow: 0 26px 70px rgba(0, 0, 0, .55); padding: 3rem; position: relative; }
 .bank-panel::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: var(--grad-gold); }
 .bank-head { display: flex; align-items: center; gap: 1.1rem; margin-bottom: 1.8rem; color: var(--gold); }
 .bank-head .icon { width: 32px; height: 32px; flex-shrink: 0; }
@@ -322,7 +359,12 @@ section { padding: 6.5rem 0; position: relative; }
 .bank-notice p { color: var(--muted); font-size: .9rem; letter-spacing: .02em; }
 
 /* ---------- contact ---------- */
-.contact { background: var(--bg2); border-top: 1px solid var(--line-soft); }
+.contact {
+  background:
+    radial-gradient(900px 480px at 6% 100%, rgba(212, 175, 55, .08), transparent 60%),
+    #0d0d0d;
+  border-top: 1px solid var(--line-soft);
+}
 .contact-grid { display: grid; grid-template-columns: .85fr 1.15fr; gap: 3.5rem; }
 .c-card { display: flex; align-items: center; gap: 1.4rem; background: linear-gradient(180deg, #101010, #0a0a0a); border: 1px solid var(--line-soft); padding: 1.5rem 1.6rem; margin-bottom: 1.2rem; transition: .3s; }
 .c-card:hover { border-color: rgba(212, 175, 55, .45); }
