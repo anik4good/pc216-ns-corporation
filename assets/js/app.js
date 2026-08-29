@@ -150,14 +150,35 @@
   }
 
   /* ---------- Vehicle stock (home section) ---------- */
-  const stockState = { items: [], filter: "ALL", loaded: false };
+  const stockState = {
+    items: [],
+    filter: "ALL",
+    body: "All",
+    make: "",
+    model: "",
+    yearFrom: "",
+    yearTo: "",
+    currency: SITE.vehicles.currency.options[0],
+    loaded: false
+  };
 
   function statusBadge(status) {
     return `<span class="v-badge st-${esc(status)}">${esc(status)}</span>`;
   }
 
+  function priceLabel(v, inUsd) {
+    if (v.hidePrice || !v.fobPrice) return SITE.vehicles.priceHidden;
+    const amount = Number(v.fobPrice);
+    if (inUsd && v.currency !== "USD") {
+      return "FOB Price: $" + Math.round(amount / SITE.vehicles.currency.jpyPerUsd).toLocaleString("en-US");
+    }
+    return SITE.vehicles.priceLabel + ": " + (v.currency === "USD" ? "$" : "¥") + amount.toLocaleString("en-US");
+  }
+
   function vehicleCard(v) {
     const img = (v.photos && v.photos[0]) || "assets/img/stock-placeholder.svg";
+    const chips = [v.bodyType, v.transmission, v.fuel].filter(Boolean);
+    const strip = [v.engine, mileageLabel(v)].filter(Boolean);
     return `
       <a class="v-card st-card-${esc(v.status)}" href="vehicle.html?id=${encodeURIComponent(v.id)}">
         <div class="v-media">
@@ -165,19 +186,20 @@
           ${statusBadge(v.status)}
         </div>
         <div class="v-body">
-          <h3>${esc(vehicleName(v))}</h3>
-          <p class="v-meta">${esc(metaLine(v))}</p>
+          <h3>${esc(vehicleName(v))}${v.year ? ` <span class="v-year">${esc(v.year)}</span>` : ""}</h3>
+          <div class="v-price-row"><span class="v-price">${esc(priceLabel(v, stockState.currency === "USD"))}</span></div>
+          ${strip.length ? `<div class="v-strip">${esc(strip.join("   |   "))}</div>` : ""}
+          ${chips.length ? `<div class="v-chips">${chips.map((c) => `<span>${esc(c)}</span>`).join("")}</div>` : ""}
           <div class="v-foot">
-            <span class="v-price ${v.hidePrice ? "is-hidden" : ""}">${esc(priceLabel(v))}</span>
             <span class="v-stock">Stock No. ${esc(v.stockNo || "—")}</span>
+            <span class="v-more">${esc(SITE.vehicles.viewLabel)} ${icons.arrow}</span>
           </div>
-          <span class="v-more">${esc(SITE.vehicles.viewLabel)} ${icons.arrow}</span>
         </div>
       </a>`;
   }
 
   function renderStockSectionShell() {
-    const s = SITE.vehicles;
+    const s = SITE.vehicles, se = s.search;
     $("#vehicles").innerHTML = `
       <div class="container">
         <div class="sec-head reveal">
@@ -185,41 +207,120 @@
           <h2>${esc(s.heading)} <span class="gold-text">${esc(s.headingGold)}</span></h2>
           <p class="sub">${esc(s.sub)}</p>
         </div>
-        <div class="v-filters reveal" id="vFilters">
-          ${s.filters.map((f) => `<button class="v-filter${f === "ALL" ? " active" : ""}" data-filter="${f}">${f}</button>`).join("")}
+        <div class="v-search reveal" id="vSearch">
+          <div class="vs-field"><label for="vsMake">${esc(se.make)}</label><select id="vsMake"><option value="">${esc(se.allMakes)}</option></select></div>
+          <div class="vs-field"><label for="vsModel">${esc(se.model)}</label><select id="vsModel"><option value="">${esc(se.allModels)}</option></select></div>
+          <div class="vs-field vs-years"><label for="vsYearFrom">${esc(se.year)}</label>
+            <span class="yr"><input id="vsYearFrom" type="number" min="1950" max="2100" placeholder="${esc(se.from)}"><em>~</em><input id="vsYearTo" type="number" min="1950" max="2100" placeholder="${esc(se.to)}"></span>
+          </div>
+          <button class="btn btn-gold vs-btn" id="vsGo" type="button">${esc(se.go)}</button>
+          <button class="btn btn-ghost vs-btn" id="vsReset" type="button">${esc(se.reset)}</button>
+        </div>
+        <div class="v-cur reveal" id="vCurrency">
+          <span class="v-cur-label">Price in</span>
+          ${s.currency.options.map((c) => `<button class="v-cur-btn${c === stockState.currency ? " active" : ""}" data-cur="${c}" type="button">${c === "JPY" ? "&#165; JPY" : "&#36; USD"}</button>`).join("")}
+        </div>
+        <div class="v-tabs reveal" id="vStatusTabs">
+          ${s.filters.map((f) => `<button class="v-tab${f === stockState.filter ? " active" : ""}" data-filter="${f}" type="button">${f}</button>`).join("")}
+        </div>
+        <div class="v-tabs v-tabs-body reveal" id="vBodyTabs">
+          ${s.bodyTypes.map((b) => `<button class="v-tab${b === stockState.body ? " active" : ""}" data-body="${b}" type="button">${esc(b)}</button>`).join("")}
         </div>
         <div class="v-grid reveal" id="vGrid"><p class="v-loading">Loading vehicles&hellip;</p></div>
       </div>`;
   }
 
+  function stockMatches(v) {
+    if (stockState.filter !== "ALL" && v.status !== stockState.filter) return false;
+    if (stockState.body !== "All" && v.bodyType !== stockState.body) return false;
+    if (stockState.make && v.make !== stockState.make) return false;
+    if (stockState.model && v.model !== stockState.model) return false;
+    if (stockState.yearFrom && !(v.year && Number(v.year) >= Number(stockState.yearFrom))) return false;
+    if (stockState.yearTo && !(v.year && Number(v.year) <= Number(stockState.yearTo))) return false;
+    return true;
+  }
+
   function applyStockFilter() {
     const grid = $("#vGrid");
     if (!grid) return;
-    const list = stockState.items.filter((v) => stockState.filter === "ALL" || v.status === stockState.filter);
+    const list = stockState.items.filter(stockMatches);
     grid.innerHTML = list.length
       ? list.map(vehicleCard).join("")
-      : `<p class="v-empty">${esc(SITE.vehicles.emptyMsg)}</p>`;
+      : `<p class="v-empty">${esc(stockState.loaded && stockState.items.length ? SITE.vehicles.noMatchMsg : SITE.vehicles.emptyMsg)}</p>`;
   }
 
-  function initStockFilters() {
-    const wrap = $("#vFilters");
-    if (!wrap) return;
-    wrap.addEventListener("click", (e) => {
-      const btn = e.target.closest(".v-filter");
+  function populateSearch() {
+    const makeSel = $("#vsMake"), modelSel = $("#vsModel");
+    if (!makeSel || !modelSel) return;
+    const esc2 = esc;
+    [...new Set(stockState.items.map((v) => v.make).filter(Boolean))].sort()
+      .forEach((m) => makeSel.insertAdjacentHTML("beforeend", `<option value="${esc2(m)}">${esc2(m)}</option>`));
+    const fillModels = () => {
+      modelSel.innerHTML = `<option value="">${esc2(SITE.vehicles.search.allModels)}</option>`;
+      [...new Set(stockState.items
+        .filter((v) => !makeSel.value || v.make === makeSel.value)
+        .map((v) => v.model).filter(Boolean))].sort()
+        .forEach((m) => modelSel.insertAdjacentHTML("beforeend", `<option value="${esc2(m)}">${esc2(m)}</option>`));
+    };
+    fillModels();
+    makeSel.addEventListener("change", fillModels);
+  }
+
+  function initStockControls() {
+    const statusTabs = $("#vStatusTabs");
+    statusTabs.addEventListener("click", (e) => {
+      const btn = e.target.closest(".v-tab");
       if (!btn) return;
       stockState.filter = btn.dataset.filter;
-      wrap.querySelectorAll(".v-filter").forEach((b) => b.classList.toggle("active", b === btn));
+      statusTabs.querySelectorAll(".v-tab").forEach((b) => b.classList.toggle("active", b === btn));
       applyStockFilter();
       if (history.replaceState) {
         const q = stockState.filter === "ALL" ? "" : "?status=" + stockState.filter;
         history.replaceState(null, "", "#vehicles" + q);
       }
     });
+
+    const bodyTabs = $("#vBodyTabs");
+    bodyTabs.addEventListener("click", (e) => {
+      const btn = e.target.closest(".v-tab");
+      if (!btn) return;
+      stockState.body = btn.dataset.body;
+      bodyTabs.querySelectorAll(".v-tab").forEach((b) => b.classList.toggle("active", b === btn));
+      applyStockFilter();
+    });
+
+    $("#vCurrency").addEventListener("click", (e) => {
+      const btn = e.target.closest(".v-cur-btn");
+      if (!btn) return;
+      stockState.currency = btn.dataset.cur;
+      document.querySelectorAll("#vCurrency .v-cur-btn").forEach((b) => b.classList.toggle("active", b === btn));
+      applyStockFilter();
+    });
+
+    $("#vsGo").addEventListener("click", () => {
+      stockState.make = $("#vsMake").value;
+      stockState.model = $("#vsModel").value;
+      stockState.yearFrom = $("#vsYearFrom").value;
+      stockState.yearTo = $("#vsYearTo").value;
+      applyStockFilter();
+    });
+
+    $("#vsReset").addEventListener("click", () => {
+      stockState.make = stockState.model = stockState.yearFrom = stockState.yearTo = "";
+      stockState.body = "All";
+      $("#vsMake").value = "";
+      $("#vsModel").value = "";
+      $("#vsYearFrom").value = "";
+      $("#vsYearTo").value = "";
+      document.querySelectorAll("#vBodyTabs .v-tab").forEach((b) => b.classList.toggle("active", b.dataset.body === "All"));
+      applyStockFilter();
+    });
+
     // Deep link: #vehicles?status=SOLD
     const m = (location.hash || "").match(/^#vehicles\?status=([A-Z]+)$/);
     if (m && SITE.vehicles.filters.includes(m[1])) {
       stockState.filter = m[1];
-      wrap.querySelectorAll(".v-filter").forEach((b) => b.classList.toggle("active", b.dataset.filter === m[1]));
+      document.querySelectorAll("#vStatusTabs .v-tab").forEach((b) => b.classList.toggle("active", b.dataset.filter === m[1]));
     }
   }
 
@@ -233,12 +334,13 @@
       stockState.items = [];
     }
     stockState.loaded = true;
+    populateSearch();
     applyStockFilter();
   }
 
   function renderVehicles() {
     renderStockSectionShell();
-    initStockFilters();
+    initStockControls();
     loadVehicles();
   }
 
@@ -459,6 +561,7 @@
     ["Engine Size", (v) => v.engine],
     ["Fuel Type", (v) => v.fuel],
     ["Transmission", (v) => v.transmission],
+    ["Body Type", (v) => v.bodyType],
     ["Color", (v) => v.color],
     ["Chassis / Model Code", (v) => v.chassis],
     ["Auction Grade", (v) => v.auctionGrade],
@@ -509,6 +612,10 @@
           </div>
         </div>`;
 
+    const approxUsd = (!v.hidePrice && v.fobPrice && v.currency !== "USD")
+      ? `<small class="vd-approx">&asymp; $${Math.round(Number(v.fobPrice) / SITE.vehicles.currency.jpyPerUsd).toLocaleString("en-US")} USD (rate: ${SITE.vehicles.currency.jpyPerUsd} JPY/USD)</small>`
+      : "";
+
     wrap.innerHTML = `
       <div class="container">
         <a class="vd-back" href="index.html#vehicles">&larr; Back to All Vehicles</a>
@@ -522,7 +629,7 @@
             <div class="vd-topline">${statusBadge(v.status)}<span class="vd-stockno">Stock No. ${esc(v.stockNo || "—")}</span></div>
             <h1>${esc(vehicleName(v))}</h1>
             <p class="v-meta">${esc(metaLine(v))}</p>
-            <div class="vd-price"><span>${esc(priceLabel(v))}</span></div>
+            <div class="vd-price"><span>${esc(priceLabel(v))}</span>${approxUsd}</div>
             <div class="spec-table">${specRows}</div>
             ${ctas}
           </div>

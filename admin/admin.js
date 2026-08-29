@@ -140,7 +140,7 @@
     const set = (id, val) => { $(id).value = val ?? ""; };
     set("f-make", v?.make); set("f-model", v?.model); set("f-year", v?.year);
     set("f-mileage", v?.mileage); set("f-engine", v?.engine); set("f-fuel", v?.fuel);
-    set("f-transmission", v?.transmission); set("f-color", v?.color); set("f-chassis", v?.chassis);
+    set("f-transmission", v?.transmission); set("f-color", v?.color); set("f-body", v?.bodyType); set("f-chassis", v?.chassis);
     set("f-grade", v?.auctionGrade); set("f-stock", v?.stockNo); set("f-dest", v?.destination);
     set("f-price", v?.fobPrice); set("f-currency", v?.currency || "JPY");
     set("f-status", v?.status || "AVAILABLE"); set("f-desc", v?.description);
@@ -209,6 +209,7 @@
       fuel: $("f-fuel").value,
       transmission: $("f-transmission").value,
       color: $("f-color").value.trim(),
+      bodyType: $("f-body").value,
       chassis: $("f-chassis").value.trim(),
       auctionGrade: $("f-grade").value.trim(),
       stockNo: $("f-stock").value.trim(),

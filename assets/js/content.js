@@ -96,14 +96,28 @@ const SITE = {
   /* ---------- Vehicle stock ---------- */
   vehicles: {
     eyebrow: "Ready Stock & Recently Sold",
-    heading: "Our",
-    headingGold: "Vehicles.",
-    sub: "Every vehicle is listed with full details and a clear status. Find your next vehicle, or ask us to source it for you.",
+    heading: "Find Your",
+    headingGold: "Vehicle.",
+    sub: "Search our stock by make, model and year — every vehicle listed with full details and a clear status.",
     filters: ["ALL", "AVAILABLE", "RESERVED", "SOLD"],
+    bodyTypes: ["All", "Sedan", "Hatchback", "SUV", "Crossover", "Coupe", "Minivan / Van", "Pickup", "Wagon", "K.Car", "Truck", "Other"],
+    currency: { options: ["JPY", "USD"], jpyPerUsd: 150 },
     priceLabel: "FOB Price",
     priceHidden: "Contact for Price",
     viewLabel: "View Details",
     emptyMsg: "New vehicles are being prepared for listing — please contact us for the latest available stock.",
+    noMatchMsg: "No vehicles match your search — try different filters, or contact us and we will source one for you.",
+    search: {
+      make: "Make",
+      model: "Model",
+      year: "Registration Year",
+      allMakes: "All Makes",
+      allModels: "All Models",
+      from: "From",
+      to: "To",
+      go: "Search",
+      reset: "Reset"
+    },
     waMessage: "Hello N.S. CORPORATION, I am interested in {stock} / {vehicle}. Please send me more information."
   },
 

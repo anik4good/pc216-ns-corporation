@@ -66,6 +66,7 @@ function pickVehicleFields(body) {
     color: str(body.color),
     chassis: str(body.chassis),
     auctionGrade: str(body.auctionGrade),
+    bodyType: str(body.bodyType),
     fobPrice: body.fobPrice ? parseInt(body.fobPrice, 10) || "" : "",
     currency: str(body.currency) || "JPY",
     hidePrice: !!body.hidePrice,
@@ -179,8 +180,12 @@ app.post("/api/upload", requireAuth, upload.single("photo"), (req, res) => {
 
 /* ---------- static ---------- */
 app.use("/uploads", express.static(UPLOAD_DIR, { maxAge: "30d", immutable: true }));
-app.use("/admin", express.static(path.join(ROOT, "admin")));
-app.use(express.static(ROOT, { extensions: ["html"] }));
+app.use("/admin", express.static(path.join(ROOT, "admin"), { setHeaders: (res) => res.setHeader("Cache-Control", "no-cache") }));
+// "no-cache" = always revalidate with ETag: visitors get updates immediately, 304s keep it fast
+app.use(express.static(ROOT, {
+  extensions: ["html"],
+  setHeaders: (res) => res.setHeader("Cache-Control", "no-cache")
+}));
 
 // clean JSON errors for upload problems (wrong file type, too large, bad JSON)
 app.use((err, req, res, next) => {
