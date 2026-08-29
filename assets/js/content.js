@@ -205,13 +205,14 @@ const SITE = {
     headingGold: "Information.",
     sub: "Use only the account details below for payments to N.S. CORPORATION CO., LTD.",
     fields: [
-      { label: "Account Name", value: "N.S. CORPORATION CO., LTD." },
-      { label: "Bank Name", value: "" },
-      { label: "Branch Name", value: "" },
-      { label: "Branch Code", value: "" },
-      { label: "Account Type", value: "" },
-      { label: "Account Number", value: "" },
-      { label: "SWIFT Code", value: "" }
+      { label: "Account Name", value: "N.S.CORPORATION CO.,LTD" },
+      { label: "Bank Name", value: "THE CHIBA KOGYO BANK, LTD." },
+      { label: "Branch Name", value: "HEAD BRANCH" },
+      { label: "Branch Code", value: "110" },
+      { label: "SWIFT Code", value: "CHIKJPJT" },
+      { label: "Account Type", value: "JPY Account" },
+      { label: "Account Number", value: "1122400" },
+      { label: "Branch Address", value: "Chiba-Shi, Mihamaku, Saiwaicho 2-1-2, Japan" }
     ],
     pendingLabel: "To be provided — please contact us directly",
     notice: "Please confirm our banking information directly with N.S. CORPORATION before making any payment. We will never notify customers of a change of bank account through an unofficial email address or third party."
